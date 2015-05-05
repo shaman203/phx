@@ -9,6 +9,7 @@ Physics.prototype.updateObjects= function(objlist)
        var obj = objlist[i];
 		if(obj.hasOwnProperty('type') && (obj.type === "circle"))
 		{
+			
 			obj.position.X = obj.position.X+1;
 			/*float newXPos = obj->position.getX() + obj->velocity.getX()*dt;
 			float newYPos = obj->position.getY() + obj->velocity.getY()*dt;
