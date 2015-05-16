@@ -12,7 +12,7 @@ var graphx;
 
 function init()
 {
-    phx = new Physics(10,0.7);
+    phx = new Physics(new Vector(0.0,0.01),0.7,500,500);
     graphx = new Graphics("myCanvas");
     
     var circle = new Circle(50, 50, new Vector(50,50), new Vector(0,0), new Vector(0,0));
@@ -23,7 +23,7 @@ function init()
 }
  
 function run() {
-    phx.updateObjects(circles);
+    phx.updateObjects(circles, Date.now());
     graphx.drawObjects(circles);
 	requestAnimationFrame(run);
 }

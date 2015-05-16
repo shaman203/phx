@@ -5,6 +5,8 @@ function Circle (radius, mass, position, velocity, acceleration) {
 	this.velocity = velocity;
 	this.acceleration = acceleration;
 	this.type = "circle";
+	this.creationTime = Date.now();
+	this.timeOnGround = 0;
 }
  
 Circle.prototype.collision = function(obj) {

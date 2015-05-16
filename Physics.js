@@ -1,57 +1,51 @@
-function Physics (g, reductionConstant) {
+function Physics (g, reductionConstant, maxHeight, maxWidth) {
 	this.g = g;
     this.rC = reductionConstant;
+	this.maxHeight = maxHeight;
+	this.maxWidth = maxWidth;
 }
 
-Physics.prototype.updateObjects= function(objlist)
+Physics.prototype.updateObjects= function(objlist, time)
 {
 	for (var i = 0; i < objlist.length; i++) {
        var obj = objlist[i];
 		if(obj.hasOwnProperty('type') && (obj.type === "circle"))
 		{
 			
-			obj.position.X = obj.position.X+1;
-			/*float newXPos = obj->position.getX() + obj->velocity.getX()*dt;
-			float newYPos = obj->position.getY() + obj->velocity.getY()*dt;
+			if(obj.position.Y == this.maxHeight - obj.radius)
+			{
+				obj.timeOnGround+=1;
+				if(obj.timeOnGround > 5)
+				{
+					obj.velocity.Y = 0;
+					obj.acceleration.Y = 0;
+					obj.timeOnGround = 0;
+				}	
+			}
+			else
+			{
+				obj.timeOnGround=0;
+				obj.acceleration.X = this.g.X;
+				obj.acceleration.Y = this.g.Y;
+			}
+			
+
+			
+			obj.velocity.X += obj.acceleration.X*(obj.creationTime - time)/1000;
+			obj.velocity.Y += obj.acceleration.Y*(obj.creationTime - time)/1000;
 	
-			float newXvelo = obj->velocity.getX() + obj->acceleration.getX() *dt;
-			float newYvelo = obj->velocity.getY() + obj->acceleration.getY() *dt;
+			obj.position.X += obj.velocity.X*(obj.creationTime - time)/1000;
+			obj.position.Y += obj.velocity.Y*(obj.creationTime - time)/1000;
+	
+			var h = this.maxHeight - obj.position.Y - obj.radius;
 		
-			float radius = ((phx::Circle*)obj)->getRadius();
-		
-			if (newYPos < radius) //if we touch the ground
+			if(h < 0)
 			{
-				newYPos = ((phx::Circle*)obj)->getRadius();
-				newXvelo = newXvelo*reductionConstant;
-				newYvelo = -1 * newYvelo*reductionConstant;
+				console.log(obj.velocity);
+				obj.position.Y += h; 
+				obj.velocity.Y = -obj.velocity.Y*this.rC; 
 			}
-			if (newXPos < radius) //if we touch left wall
-			{
-				newXPos = ((phx::Circle*)obj)->getRadius();
-				newYvelo = newYvelo*reductionConstant;
-				newXvelo = -1 * newXvelo*reductionConstant;
-			}
-			if (newXPos > this->maxWidth - radius) //if we touch right wall
-			{
-				newXPos = this->maxWidth - radius;
-				newYvelo = newYvelo*reductionConstant;
-				newXvelo = -1 * newXvelo*reductionConstant;
-			}
-		
-			if (newYPos > this->maxHeight - radius) //if we touch the ceiling
-			{
-				newYPos = this->maxHeight - radius;
-				newXvelo = newXvelo*reductionConstant;
-				newYvelo = -1 * newYvelo*reductionConstant;
-			}
-		
-			if (newYvelo < 60)
-				newYvelo = 0;
-			if (newXvelo < 60)
-				newXvelo = 0;
-			obj->setPosition(newXPos, newYPos);
-			obj->setVelocity(newXvelo, newYvelo);
-			*/
+			
 		}
 	}
 };
