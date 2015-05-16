@@ -12,13 +12,16 @@ var graphx;
 
 function init()
 {
-    phx = new Physics(new Vector(0.0,0.01),0.7,500,500);
+    phx = new Physics(new Vector(0.0,0.01),0.3,500,500);
     graphx = new Graphics("myCanvas");
     
-    var circle = new Circle(50, 50, new Vector(50,50), new Vector(0,0), new Vector(0,0));
+    var circle = new Circle(20, 5, new Vector(150,50), new Vector(0,0), new Vector(0,0));
 	circles.push(circle); 
     
-    circle = new Circle(50, 50, new Vector(150,150), new Vector(0,0), new Vector(0,0));
+    circle = new Circle(20, 5, new Vector(120,150), new Vector(0,0), new Vector(0,0));
+	circles.push(circle); 
+    
+    circle = new Circle(20, 3, new Vector(40,150), new Vector(0,0), new Vector(0,0));
 	circles.push(circle); 
 }
  

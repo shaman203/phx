@@ -9,11 +9,19 @@ function Circle (radius, mass, position, velocity, acceleration) {
 	this.timeOnGround = 0;
 }
  
-Circle.prototype.collision = function(obj) {
-	if(obj.hasOwnProperty('field') && (obj.type === "circle"))
+Circle.prototype.getCollision = function(obj) {
+	if(obj.hasOwnProperty('type') && (obj.type === "circle"))
 	{
-		//if()
+		var r1 = obj.radius; 
+		var r2 = this.radius;
+		
+		var x1 = obj.position.X;
+		var x2 = this.position.X;
+		var y1 = obj.position.Y;
+		var y2 = this.position.Y;
+
+		return (r1+r2) - Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
 	}
-    return false; 
+    return 0; 
 };
 
