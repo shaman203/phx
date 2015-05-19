@@ -12,7 +12,7 @@ var graphx;
 
 function init()
 {
-    phx = new Physics(new Vector(0.0,0.01),0.4,500,500);
+    phx = new Physics(new Vector(0.0,9.8),0.4,500,500);
     graphx = new Graphics("myCanvas");
     
     var circle = new Circle(20, 5, new Vector(150,50), new Vector(0,0), new Vector(0,0));
@@ -35,6 +35,23 @@ function addCircle()
     var xVel = parseFloat(document.getElementById('xVel').value);
     var yVel = parseFloat(document.getElementById('yVel').value);
    
-    var circle = new Circle(mass, radius, new Vector(xPos,yPos), new Vector(xVel,yVel), new Vector(0,0)); 
+    var circle = new Circle(radius, mass, new Vector(xPos,yPos), new Vector(xVel,yVel), new Vector(0,0)); 
     circles.push(circle);
+}
+
+function clearAll()
+{
+    circles = new Array();
+}
+
+function gravityChanged()
+{
+    if( document.getElementById("gravity").checked)
+    {
+        phx.g = new Vector(0.0,9.8);
+    }
+    else
+    {
+        phx.g = new Vector(0.0,0);
+    }
 }

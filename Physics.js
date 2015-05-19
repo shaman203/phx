@@ -4,13 +4,13 @@ function Physics (g, reductionConstant, maxHeight, maxWidth) {
 	this.maxHeight = maxHeight;
 	this.maxWidth = maxWidth;
 	this.friction = 0.9;
+	this.maxVelocity = 10;
 }
 
 Physics.prototype.updateObjects= function(objlist, time)
 {
 	for (var i = 0; i < objlist.length; i++) {
 		var obj1 = objlist[i];
-		this.updateAttributes(obj1,time);
 		
 		for(var j = i+1; j < objlist.length; j++)
 		{
@@ -20,7 +20,11 @@ Physics.prototype.updateObjects= function(objlist, time)
 			{
 				this.resolveCollision(obj1,obj2,col);
 			}	
-		}			
+		}	
+		
+		this.updateAttributes(obj1,time);
+		
+				
 	}
 };
 
@@ -29,35 +33,35 @@ Physics.prototype.resolveCollision= function(obj1, obj2,col)
 	if( obj1.hasOwnProperty('type') && (obj1.type === "circle")
 	&& obj2.hasOwnProperty('type') && (obj2.type === "circle"))
 	{
-	   var delta = obj1.position.subtract(obj2.position);
-	    var d =  obj1.position.subtract(obj2.position).vectLength();
-	    // minimum translation distance to push balls apart after intersecting
-	    var mtd = delta.multScalar((obj1.radius + obj2.radius-d)/d); 
-	
-	
-	    // resolve intersection --
-	    // inverse mass quantities
-	    var im1 = 1 / obj1.mass; 
-	    var im2 = 1 / obj2.mass;
-	
-	    // push-pull them apart based off their mass
-	    obj1.position = obj1.position.add(mtd.multScalar(im1 / (im1 + im2)));
-	    obj2.position = obj2.position.subtract(mtd.multScalar(im2 / (im1 + im2)));
-	
-	    // impact speed
-	    var v = (obj1.velocity.subtract(obj2.velocity));
-	    var vn = v.dotProduct(mtd.normalize());
-	
-	    // sphere intersecting but moving away from each other already
-	    if (vn > 0.0) return;
-	
-	    // collision impulse
-	    var i = (-(1.0 + 0.4) * vn) / (im1 + im2);
-	    var impulse = mtd.multScalar(i);
-	
-	    // change in momentum
-	    obj1.velocity = obj1.velocity.add(impulse.multScalar(im1));
-	    obj2.velocity = obj2.velocity.subtract(impulse.multScalar(im2));
+			   	var delta = obj1.position.subtract(obj2.position);
+			    var d =  obj1.position.subtract(obj2.position).vectLength();
+			    // minimum translation distance to push balls apart after intersecting
+			    var mtd = delta.multScalar((obj1.radius + obj2.radius-d)/d); 
+			
+			
+			    // resolve intersection --
+			    // inverse mass quantities
+			    var im1 = 1 / obj1.mass; 
+			    var im2 = 1 / obj2.mass;
+			
+			    // push-pull them apart based off their mass
+			    obj1.position = obj1.position.add(mtd.multScalar(im1 / (im1 + im2)));
+			    obj2.position = obj2.position.subtract(mtd.multScalar(im2 / (im1 + im2)));
+			
+			    // impact speed
+			    var v = (obj1.velocity.subtract(obj2.velocity));
+			    var vn = v.dotProduct(mtd.normalize());
+			
+			    // sphere intersecting but moving away from each other already
+			    if (vn > 0.0) return;
+			
+			    // collision impulse
+			    var i = (-(1.0 + 0.4) * vn) / (im1 + im2);
+			    var impulse = mtd.multScalar(i);
+			
+			    // change in momentum
+			    obj1.velocity = Math.min(this.maxVelocity, obj1.velocity.add(impulse.multScalar(im1)));
+			    obj2.velocity = Math.min(this.maxVelocity, obj2.velocity.subtract(impulse.multScalar(im2)));
 		
 		
 		/*obj1.position = obj1.position.subtract(obj1.velocity.normalize().multScalar(col/2));
@@ -100,7 +104,7 @@ Physics.prototype.updateAttributes= function(obj,time)
 		if(obj.hasOwnProperty('type') && (obj.type === "circle"))
 			{
 				
-				if(obj.position.Y == this.maxHeight - obj.radius)
+				if(obj.position.Y >= this.maxHeight - obj.radius)
 				{
 					obj.timeOnGround+=1;
 					if(obj.timeOnGround > 5)
@@ -118,9 +122,19 @@ Physics.prototype.updateAttributes= function(obj,time)
 					obj.acceleration.Y = this.g.Y;
 				}
 				
-				obj.velocity.X += obj.acceleration.X*(obj.creationTime - time)/1000;
-				obj.velocity.Y += obj.acceleration.Y*(obj.creationTime - time)/1000;
+				obj.velocity.X =  Math.min(this.maxVelocity, obj.velocity.X + obj.acceleration.X*(obj.creationTime - time)/1000);
+				obj.velocity.Y = Math.min(this.maxVelocity, obj.velocity.Y + obj.acceleration.Y*(obj.creationTime - time)/1000);
 		
+				if(obj.velocity.X < this.g)
+				{
+					obj.velocity.X = 0;
+				}
+				
+				if(obj.velocity.Y < this.g)
+				{
+					obj.velocity.Y = 0;
+				}
+			
 				obj.position.X += obj.velocity.X*(obj.creationTime - time)/1000;
 				obj.position.Y += obj.velocity.Y*(obj.creationTime - time)/1000;
 		

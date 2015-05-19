@@ -37,8 +37,10 @@
            <tr><td>Radius</td><td><input type="text" id="radius" size="5"></input></td></tr>
            <tr><td>Position</td><td>X: <input type="text" id="xPos" size="5"></input> Y:<input type="text" id="yPos" size="5"></input></td></tr>    
            <tr><td>Velocity</td><td>X: <input type="text" id="xVel" size="5"></input> Y:<input type="text" id="yVel" size="5"></input></td></tr>
+           <tr><td><input type="checkbox" checked="true" onchange="gravityChanged()" id="gravity">Gravity on</input></td></tr>
        </table>
            <button onclick="addCircle()">Add object</button>
+           <button onclick="clearAll()">Clear all</button>
     </div>
     <script>
         init();
