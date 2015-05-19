@@ -12,7 +12,7 @@ var graphx;
 
 function init()
 {
-    phx = new Physics(new Vector(0.0,9.8),0.4,500,500);
+    phx = new Physics(new Vector(0.0,0.9),0.4,500,500);
     graphx = new Graphics("myCanvas");
     
     var circle = new Circle(20, 5, new Vector(150,50), new Vector(0,0), new Vector(0,0));
@@ -48,7 +48,11 @@ function gravityChanged()
 {
     if( document.getElementById("gravity").checked)
     {
-        phx.g = new Vector(0.0,9.8);
+        phx.g = new Vector(0.0,0.9);
+        for (var i = 0; i < circles.length; i++) {
+		var obj1 = circles[i];
+		  obj1.creationTime = Date.now();
+	   }
     }
     else
     {

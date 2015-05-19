@@ -4,7 +4,6 @@ function Physics (g, reductionConstant, maxHeight, maxWidth) {
 	this.maxHeight = maxHeight;
 	this.maxWidth = maxWidth;
 	this.friction = 0.9;
-	this.maxVelocity = 10;
 }
 
 Physics.prototype.updateObjects= function(objlist, time)
@@ -60,8 +59,8 @@ Physics.prototype.resolveCollision= function(obj1, obj2,col)
 			    var impulse = mtd.multScalar(i);
 			
 			    // change in momentum
-			    obj1.velocity = Math.min(this.maxVelocity, obj1.velocity.add(impulse.multScalar(im1)));
-			    obj2.velocity = Math.min(this.maxVelocity, obj2.velocity.subtract(impulse.multScalar(im2)));
+			    obj1.velocity = obj1.velocity.add(impulse.multScalar(im1));
+			    obj2.velocity = obj2.velocity.subtract(impulse.multScalar(im2));
 		
 		
 		/*obj1.position = obj1.position.subtract(obj1.velocity.normalize().multScalar(col/2));
@@ -122,8 +121,8 @@ Physics.prototype.updateAttributes= function(obj,time)
 					obj.acceleration.Y = this.g.Y;
 				}
 				
-				obj.velocity.X =  Math.min(this.maxVelocity, obj.velocity.X + obj.acceleration.X*(obj.creationTime - time)/1000);
-				obj.velocity.Y = Math.min(this.maxVelocity, obj.velocity.Y + obj.acceleration.Y*(obj.creationTime - time)/1000);
+				obj.velocity.X = obj.velocity.X + obj.acceleration.X*(obj.creationTime - time)/1000;
+				obj.velocity.Y = obj.velocity.Y + obj.acceleration.Y*(obj.creationTime - time)/1000;
 		
 				if(obj.velocity.X < this.g)
 				{
