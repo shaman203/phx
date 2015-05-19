@@ -27,9 +27,18 @@
  
 <body>
     <div id="container">
-        <canvas id="myCanvas" width="500" height="500">
+        <canvas id="myCanvas" width="500" height="500"  style="float:left; margin:20px">
          
         </canvas>
+    </div>
+    <div id="controls" style="float:left; margin:20px">
+       <table>
+           <tr><td>Mass</td><td><input type="text" id="mass" size="5"></input></td></tr>
+           <tr><td>Radius</td><td><input type="text" id="radius" size="5"></input></td></tr>
+           <tr><td>Position</td><td>X: <input type="text" id="xPos" size="5"></input> Y:<input type="text" id="yPos" size="5"></input></td></tr>    
+           <tr><td>Velocity</td><td>X: <input type="text" id="xVel" size="5"></input> Y:<input type="text" id="yVel" size="5"></input></td></tr>
+       </table>
+           <button onclick="addCircle()">Add object</button>
     </div>
     <script>
         init();
